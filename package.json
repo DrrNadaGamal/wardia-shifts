@@ -1,0 +1,14 @@
+{
+  "name": "wardia-shifts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Wardia (وردية): bilingual (Arabic RTL / English) restaurant staff scheduling, time clock and payroll demo",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "dev": "node dev-server.mjs"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^25.18.1"
+  }
+}
