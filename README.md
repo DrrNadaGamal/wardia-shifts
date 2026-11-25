@@ -60,9 +60,9 @@ This is a working demo, not a production system.
 
 ## Tests
 
-- `npm test`: unit tests for the rules (rest, caps, overtime, tips rounding, payroll lock, privacy).
-- `./run-local.sh node e2e/smoke.mjs`: opens every page for every role in both languages and fails on script errors or `undefined`/`NaN` text.
-- `node e2e/smoke.mjs https://wardia-shifts.vercel.app` runs the same against the live demo. `node e2e/shots.mjs` regenerates the screenshots.
+- `npm test`: 43 unit tests for the rules (rest, caps, overtime, tips rounding, payroll lock, privacy).
+- `node e2e/e2e.mjs https://wardia-shifts.vercel.app`: 190 browser and API checks against the live site. They cover forged and tampered tokens, malformed and oversized bodies, unknown actions, what each role can and cannot see, role permissions, input validation, idempotent creates, hostile text shown as plain text, shifts, claims, time off, availability, time clock, corrections, tips, payroll runs and period locking, every page for every role in English and Arabic, RTL, phone layout and the Arabic switch. The run resets the demo data at the end.
+- `node e2e/smoke.mjs <url>` opens every page for every role in both languages. `node e2e/shots.mjs` regenerates the screenshots.
 
 ## Structure
 

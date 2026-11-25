@@ -24,7 +24,7 @@ export default async function handler(req, res) {
       if (JSON.stringify(body).length > 20000) return res.status(413).json({ error: 'Too large' });
       const op = body.op || {};
       if (op.type === 'login') {
-        const u = state.users.find((x) => x.pin === String(op.pin || ''));
+        const u = typeof op.pin === 'string' ? state.users.find((x) => x.pin === op.pin) : null;
         if (!u) return res.status(401).json({ error: 'Wrong PIN' });
         return res.status(200).json({ token: signToken(u.id, now), me: { id: u.id, name: u.name, nameAr: u.nameAr, role: u.role, employeeId: u.employeeId || null } });
       }
