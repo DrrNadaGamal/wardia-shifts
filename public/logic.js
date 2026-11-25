@@ -825,7 +825,7 @@ export function seed(now = Date.now()) {
   s.timeOff.push({ id: nextId(s, 't'), employeeId: 'e14', from: addDays(today, 5), to: addDays(today, 6), reason: 'Medical appointment', status: 'approved', decidedBy: 'Dina Samir', decidedAt: now - 5 * 3600e3, createdAt: now - 2 * 864e5 });
   const dsh = s.shifts.find((x) => x.employeeId === 'e5' && x.date === addDays(today, -2) && x.published);
   if (dsh && !lockedDate(s, dsh.date)) { const p = s.punches.find((x) => x.shiftId === dsh.id); if (p && p.out) { s.corrections.push({ id: nextId(s, 'c'), employeeId: 'e5', date: dsh.date, in: dsh.start, out: hmOf((toMin(dsh.end) + 30) % 1440), reason: 'Phone died, forgot to clock out', status: 'pending', createdAt: now - 4 * 3600e3 }); } }
-  const yday = addDays(today, -1); const fp = s.punches.find((x) => x.out && punchDate(x) === yday && x.employeeId === 'e23');
+  const yday = addDays(today, -1); const fp = s.punches.find((x) => x.out && punchDate(x) === yday && x.employeeId !== 'e3' && x.in < now - 13 * 3600e3);
   if (fp) { fp.out = null; fp.paidMin = null; fp.approved = false; }
   for (let i = 0; i < 30; i++) audit(s, user, now - (i + 1) * 5400e3, ['shift.assign', 'clock.in', 'timesheet.approve', 'swap.approve', 'week.publish'][i % 5], 'seed history');
   s.audit.length = 0; audit(s, { id: 'u-owner', name: 'Hany Wagdy' }, now, 'seed', 'Demo data created');

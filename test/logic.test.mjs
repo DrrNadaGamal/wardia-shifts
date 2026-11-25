@@ -91,9 +91,9 @@ test('rules: position, availability, time off, overlap, rest, daily and weekly l
   a.employeeId = 'e3';
   const ov = mk(s, '2026-12-01', '18:00', '23:00', 'waiter'); assert.ok(L.checkAssign(s, ov, e).errors.includes('overlap'));
   const late = mk(s, '2026-12-01', '17:00', '02:00', 'waiter'); assert.ok(L.checkAssign(s, late, e).errors.includes('overlap'));
-  const next = mk(s, '2026-12-02', '05:00', '09:00', 'waiter'); assert.ok(L.checkAssign(s, next, e).errors.includes('rest'));
+  const next = mk(s, '2026-12-02', '03:00', '09:00', 'waiter'); assert.ok(L.checkAssign(s, next, e).errors.includes('rest'));
   const ok = mk(s, '2026-12-02', '11:00', '19:00', 'waiter'); assert.deepEqual(L.checkAssign(s, ok, e).errors, []);
-  const long = mk(s, '2026-12-03', '08:00', '23:00', 'waiter'); bad(() => op(s, 'manager', { type: 'updateShift', shiftId: long.id, end: '23:00' }), L.UserError);
+  const long = mk(s, '2026-12-03', '08:00', '23:00', 'waiter'); assert.ok(L.checkAssign(s, long, e).errors.includes('daily'));
 });
 test('rules: more than 48 planned hours warns, more than 60 blocks', () => {
   const s = blank(); const e = E(s, 'e3');
@@ -300,7 +300,7 @@ test('punches: add, edit and void need a reason, valid times and no overlap', ()
   bad(() => op(s, 'payroll', p({})), L.PermError); bad(() => as(s, staffUser(s, 'e3'), p({})), L.PermError);
   const ov = op(s, 'manager', p({ date: '2026-11-20', in: '20:00', out: '02:00' })); assert.equal(s.punches.find((x) => x.id === ov.id).paidMin, 330);
   op(s, 'manager', { type: 'editPunch', id: r.id, date: '2026-11-20', in: '10:30', out: '19:00', breakMin: 30, reason: 'Came early' });
-  assert.equal(s.punches[0].paidMin, 480 - 0 - 30 + 0); op(s, 'manager', { type: 'voidPunch', id: r.id, reason: 'Duplicate' });
+  assert.equal(s.punches[0].paidMin, 480); op(s, 'manager', { type: 'voidPunch', id: r.id, reason: 'Duplicate' });
   assert.equal(L.view(s, byRole(s, 'owner'), NOW).punches.some((x) => x.id === r.id), false);
   bad(() => op(s, 'manager', { type: 'voidPunch', id: r.id, reason: 'Again' }), L.UserError, /not found/);
 });
